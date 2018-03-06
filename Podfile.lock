@@ -1,0 +1,15 @@
+PODS:
+  - Reflection (0.15.0)
+  - SwiftKVC (4.0.0):
+    - Reflection (~> 0.15.0)
+
+DEPENDENCIES:
+  - SwiftKVC
+
+SPEC CHECKSUMS:
+  Reflection: 25cb331157e0d2691271f6492216030acc58ff1e
+  SwiftKVC: 89d685952507c9baabf02070d33b84db62d7ee4a
+
+PODFILE CHECKSUM: 16c04641a867c8ae3e46487058179e4104eaa2d1
+
+COCOAPODS: 1.4.0
