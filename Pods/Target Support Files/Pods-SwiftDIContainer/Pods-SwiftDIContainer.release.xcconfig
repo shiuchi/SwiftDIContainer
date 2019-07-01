@@ -1,10 +1,9 @@
-ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES
-FRAMEWORK_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/Reflection" "${PODS_CONFIGURATION_BUILD_DIR}/SwiftKVC"
+FRAMEWORK_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/CRuntime" "${PODS_CONFIGURATION_BUILD_DIR}/Runtime"
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
-LD_RUNPATH_SEARCH_PATHS = $(inherited) '@executable_path/Frameworks' '@loader_path/Frameworks'
-OTHER_CFLAGS = $(inherited) -iquote "${PODS_CONFIGURATION_BUILD_DIR}/Reflection/Reflection.framework/Headers" -iquote "${PODS_CONFIGURATION_BUILD_DIR}/SwiftKVC/SwiftKVC.framework/Headers"
-OTHER_LDFLAGS = $(inherited) -framework "Reflection" -framework "SwiftKVC"
-OTHER_SWIFT_FLAGS = $(inherited) "-D" "COCOAPODS"
+HEADER_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/CRuntime/CRuntime.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/Runtime/Runtime.framework/Headers"
+LD_RUNPATH_SEARCH_PATHS = $(inherited) '@executable_path/Frameworks' '@loader_path/Frameworks' '@executable_path/../../Frameworks'
+OTHER_LDFLAGS = $(inherited) -framework "CRuntime" -framework "Runtime"
+OTHER_SWIFT_FLAGS = $(inherited) -D COCOAPODS
 PODS_BUILD_DIR = ${BUILD_DIR}
 PODS_CONFIGURATION_BUILD_DIR = ${PODS_BUILD_DIR}/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)
 PODS_PODFILE_DIR_PATH = ${SRCROOT}/.
