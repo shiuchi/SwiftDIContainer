@@ -30,13 +30,13 @@ public class SwiftDIContainer {
     ///
     /// - Parameter clazz:　Injectable.Type
     public func register<T: Injectable, Input>(_ clazz: T.Type, input: Input) where T.Input == Input{
-        var instance = clazz.init(input: input)
-        register(&instance)
+        let instance = clazz.init(input: input)
+        register(instance)
     }
 
     public func register<T: Injectable>(_ clazz: T.Type) where T.Input == Void {
-        var instance = clazz.instantiate()
-        register(&instance)
+        let instance = clazz.instantiate()
+        register(instance)
     }
 
     public func register<T: Injectable>(_ _instance: T) {
@@ -54,7 +54,6 @@ public class SwiftDIContainer {
         //add list, if already register class, do nothing...
         if list[className] == nil {
             list[className] = instance
-            log("register : \(className)")
         } else {
             return
         }
@@ -65,11 +64,7 @@ public class SwiftDIContainer {
         
         //injection
         info.properties.filter { p in
-            if let i = try? typeInfo(of: p.type) {
-                if i.kind == .struct {
-                    return false
-                }
-            }
+            //todo except for Injectable
             return !isSwiftStandardLibrary(p.type) && p.isVar
         }.filter { p in
             if let value = try? p.get(from: instance) {
@@ -82,17 +77,11 @@ public class SwiftDIContainer {
             }
         }.forEach { p in
             if let obj = find(p.type) {
-                do {
-                    log("set \(info.name).\(p.name) = \(obj)")
-                    try p.set(value: obj, on: &instance)
-                } catch {
-                    log(error)
-                }
+                try? p.set(value: obj, on: &instance)
             } else {
                 // if could not find class instance, add wating list
                 let wattingClassName = getClassName(p.type)
                 let watingData = WattingData(instance: instance, property: p)
-                log("add watings \(className).\(p.name)")
                 if var waittings = waittings[wattingClassName] {
                     waittings.append(watingData)
                 } else {
@@ -105,11 +94,7 @@ public class SwiftDIContainer {
         if let waitList = waittings[className] {
             waitList.forEach { data in
                 var wattingInstance = data.instance
-                do {
-                    try data.property.set(value: instance, on: &wattingInstance)
-                } catch {
-                    log(error)
-                }
+                try? data.property.set(value: instance, on: &wattingInstance)
             }
             waittings.removeValue(forKey: className)
         }
@@ -163,30 +148,7 @@ public class SwiftDIContainer {
     }
 }
 
-internal func log(_ messages: Any?..., function: String = #function, file: String = #file, line: Int = #line) {
-    
-        let _file = file.components(separatedBy: "/").last!
-        let _function = function.replacingOccurrences(of: "()", with: "")
-        if !messages.isEmpty {
-            let m = messages.map { message -> String in
-                if let message = message {
-                    return "\(message)"
-                }else{
-                    return "nil"
-                }
-                }.joined(separator: ",")
-            print("log \(m) (\(_file).\(_function) Line:\(line))")
-        } else{
-            print("log (\(_file).\(_function) Line:\(line))")
-        }
-    
-}
-
-public protocol InjectableProtocol: class {
-    
-}
-
-public protocol Injectable: InjectableProtocol {
+public protocol Injectable: class {
     associatedtype Input
     init(input: Input)
 }

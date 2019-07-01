@@ -13,8 +13,6 @@ class ViewController: UIViewController {
     
     var instanceClassA = ClassA(input: "classA::id")
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         let container = SwiftDIContainer()
@@ -22,26 +20,6 @@ class ViewController: UIViewController {
         container.register(ClassB.self)
         container.register(ClassC.self, input: (index: 0, id: "id"))
         instanceClassA.log()
-        
-//        var hoge = Hoge(id: 0)
-//        list.register(&hoge)
-//        hoge.id = 2
-//
-//        print(hoge.id)
-    }
-}
-
-
-
-struct Hoge {
-    var id: Int
-    var a: ClassA? = nil
-    init(id: Int, a: ClassA? = nil){
-        self.id = id
-    }
-    
-    mutating func update(id: Int) {
-        self.id = id
     }
 }
 
@@ -49,7 +27,6 @@ class ClassA: Injectable {
     typealias Input = String
 
     let id: String
-    var hoge = Hoge(id: 0)
     var instanceClassB: ClassB!
     var instanceClassC: ClassC!
 
@@ -58,19 +35,16 @@ class ClassA: Injectable {
     }
 
     func log() {
+        print("ClassA:log")
         print(instanceClassB)
         print(instanceClassC)
-        print(hoge.id)
     }
-
 }
 
 class ClassB: Injectable {
     typealias Input = Void
 
-    var instanceA: ClassA = ClassA(input: "idddd")
-    var hoge: Hoge?
-
+    var instanceA: ClassA = ClassA(input: "Inner classA")
     required init(input: Void) {
     }
 }
@@ -85,6 +59,4 @@ class ClassC: Injectable {
         self.id = input.id
         self.index = input.index
     }
-
-
 }
